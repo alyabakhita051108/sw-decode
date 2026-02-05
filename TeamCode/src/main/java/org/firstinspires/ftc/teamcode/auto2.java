@@ -1,0 +1,110 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.ftc.Actions;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+
+import org.firstinspires.ftc.teamcode.controllers.RobotPoseController;
+import org.firstinspires.ftc.teamcode.controllers.ShooterController;
+import org.firstinspires.ftc.teamcode.controllers.ShooterRotatorController;
+import org.opencv.core.Mat;
+
+import java.util.jar.Attributes;
+
+@Autonomous(name = "auto2")
+public class auto2 extends LinearOpMode {
+    private DcMotorEx intake;
+    private CRServo servo1;
+    private static final double COUNTS_PER_REV = 28.0;
+    private static final double SHOOTER_VELOCITY = 2100; // ticks/sec
+
+
+    private RobotPoseController robotPoseController;
+    private ShooterRotatorController turret;
+    private ShooterController shooter;
+    private MecanumDrive drive;
+
+    private static final double P = 90;
+    private static final double F = 17.6;
+    // Set this to true for Red Alliance, false for Blue
+    private boolean isBlue = false;
+
+    public Pose2d reflect(double x, double y, double degrees) {
+        return isBlue ? new Pose2d(x, -y, -degrees) : new Pose2d(x, y, degrees);
+    }
+
+    public Vector2d reflectV(double x, double y) {
+        return isBlue ? new Vector2d(x, -y) : new Vector2d(x, y);
+    }
+
+    public double reflect(double value) {
+        return isBlue ? -value : value;
+    }
+
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        robotPoseController = new RobotPoseController(hardwareMap);
+        turret =new ShooterRotatorController(hardwareMap, robotPoseController, "turret");
+        shooter = new ShooterController(hardwareMap, "shooter");
+        intake = hardwareMap.get(DcMotorEx.class, "intake");
+        servo1 = hardwareMap.get(CRServo.class, "servo1");
+
+        while (true) {
+            if (gamepad1.crossWasPressed()) {
+                isBlue = !isBlue;
+            }
+
+            telemetry.addData("Current Team : ", isBlue ? "BLUE" : "RED");
+            telemetry.update();
+            if (isStarted()) {
+                break;
+            }
+        }
+
+        Pose2d beginPose = new Pose2d(
+                61.06, 12.27,Math.toRadians(150.16)
+        );
+
+        MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
+
+        waitForStart();
+
+        Action path = drive.actionBuilder(beginPose)
+               // .afterTime(0.0, () -> shooter.setPower(-1))
+                .waitSeconds(3)
+                .splineTo(reflectV(34.3, 27.28), Math.toRadians(reflect(92.41)))
+                .splineTo(reflectV(34.4, 58.08), Math.toRadians(reflect(91.61)))
+                .waitSeconds(0.5)
+                //ballintked
+                .lineToYConstantHeading(reflect(48))
+                .splineTo(reflectV(60.74, 11.02), Math.toRadians(reflect(-63.43)))
+
+                //shoot2
+                .waitSeconds(3)
+                .splineTo(reflectV(19.93, 24.63), Math.toRadians(reflect(132.74)))
+                .splineTo(reflectV(11.5, 58.24), Math.toRadians(reflect(88.81)))
+                .waitSeconds(0.5)
+
+//                .splineTo(new Vector2d(54.18, 6.33), Math.toRadians(173.46))
+//                .splineTo(new Vector2d(25.25, 12.27), Math.toRadians(181.24))
+//                .splineTo(new Vector2d(11.3, 56.90), Math.toRadians(94.64))gi
+                //ball 3 intaked
+                .lineToYConstantHeading(reflect(reflect(48)))
+                .splineTo(reflectV(59.34, 9.77), Math.toRadians(reflect(-42.51)))
+
+                .build();
+
+
+        Actions.runBlocking(new SequentialAction(path));
+
+    }
+}
