@@ -73,13 +73,20 @@ public class auto1 extends LinearOpMode {
                 isBlue = !isBlue;
             }
 
+            if (gamepad1.triangleWasPressed()) {
+                robotPoseController.resetYaw();
+                telemetry.addLine("ROBOT YAW JUST SET TO RESET");
+            }
+
+
             telemetry.addData("Current Team : ", isBlue ? "BLUE" : "RED");
+            telemetry.addLine("press gamepad 1 triangle button to reset robot yaw if necessary.");
+
             telemetry.update();
             if (isStarted()) {
                 break;
             }
         }
-        robotPoseController.resetYaw();
 
         Pose2d beginPose = reflect(-57, 45,Math.toRadians(reflect(127.16)));
         // 53,24 | 48,7

@@ -70,6 +70,16 @@ public class auto2 extends LinearOpMode {
                 isBlue = !isBlue;
             }
 
+            if (gamepad1.triangleWasPressed()) {
+                robotPoseController.resetYaw();
+                telemetry.addLine("ROBOT YAW JUST SET TO RESET");
+            }
+
+
+            telemetry.addData("Current Team : ", isBlue ? "BLUE" : "RED");
+            telemetry.addLine("press gamepad 1 triangle button to reset robot yaw if necessary.");
+
+
             telemetry.addData("Current Team : ", isBlue ? "BLUE" : "RED");
             telemetry.update();
             if (isStarted()) {
@@ -77,7 +87,7 @@ public class auto2 extends LinearOpMode {
             }
         }
 
-        robotPoseController.resetYaw();
+//        robotPoseController.resetYaw();
 
         Pose2d beginPose = reflect(
                 61.06, 12.27,Math.toRadians(150.16)
@@ -115,9 +125,7 @@ public class auto2 extends LinearOpMode {
 
                 // BLM DI TEST
                 .afterTime(0.0, () -> {
-                    turret.setTargetWorldAngle(reflect(133.7));
                     shooter.setTargetVelocity(SHOOTER_VELOCITY);
-                    turret.setTargetWorldAngle(reflect(158.9-2));
                 })
 
                 .afterTime(0.5, () -> intake.setPower(1))
