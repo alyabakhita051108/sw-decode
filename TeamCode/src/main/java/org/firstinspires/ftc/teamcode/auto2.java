@@ -154,7 +154,7 @@ public class auto2 extends LinearOpMode {
                 //shoot2
                 // BLM DI TEST
                 .afterTime(0.0, () -> {
-                    turret.setTargetWorldAngle(reflect(-2)); // di check dulu
+                    turret.setTargetWorldAngle(reflect(158.9-DEGREE_OFFSET)); // di check dulu
                     intake.setPower(1);
                 })
 //                .waitSeconds(1)
@@ -182,7 +182,7 @@ public class auto2 extends LinearOpMode {
                 .splineTo(reflectV(60.24, 11.71), Math.toRadians(0.00))
 
                 .afterTime(0.0, () -> {
-                    turret.setTargetWorldAngle(reflect(-2)); // di check dulu
+                    turret.setTargetWorldAngle(reflect(158.9-DEGREE_OFFSET)); // di check dulu
                     intake.setPower(1);
                 })
 //                .waitSeconds(1)
