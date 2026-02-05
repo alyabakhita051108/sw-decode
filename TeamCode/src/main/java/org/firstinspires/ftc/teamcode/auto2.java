@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -11,6 +13,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.controllers.RobotPoseController;
 import org.firstinspires.ftc.teamcode.controllers.ShooterController;
@@ -21,6 +24,8 @@ import java.util.jar.Attributes;
 
 @Autonomous(name = "auto2")
 public class auto2 extends LinearOpMode {
+    private ElapsedTime opModeTime = new ElapsedTime();
+
     private DcMotorEx intake;
     private CRServo servo1;
     private static final double COUNTS_PER_REV = 28.0;
@@ -110,8 +115,9 @@ public class auto2 extends LinearOpMode {
 
                 // BLM DI TEST
                 .afterTime(0.0, () -> {
+                    turret.setTargetWorldAngle(reflect(133.7));
                     shooter.setTargetVelocity(SHOOTER_VELOCITY);
-                    turret.setTargetWorldAngle(reflect(-2));
+                    turret.setTargetWorldAngle(reflect(158.9-2));
                 })
 
                 .afterTime(0.5, () -> intake.setPower(1))
@@ -181,7 +187,51 @@ public class auto2 extends LinearOpMode {
 
 
 
-        Actions.runBlocking(new SequentialAction(path));
+//        Actions.runBlocking(new SequentialAction(path));
+        if (isStopRequested()) return;
 
+        // Build and execute the action
+
+
+        while (opModeIsActive()) {
+            opModeTime.reset();
+            runBlocking(path);
+        }
+    }
+
+
+
+    public void runBlocking(Action action) {
+//        FtcDashboard dash = FtcDashboard.getInstance();
+//        Canvas previewCanvas = new Canvas();
+//        action.preview(previewCanvas);
+
+        boolean running = true;
+        while (running && !Thread.currentThread().isInterrupted()) {
+            TelemetryPacket packet = new TelemetryPacket();
+//            packet.fieldOverlay().getOperations().addAll(previewCanvas.getOperations());
+            packet.put("time", opModeTime);
+            shooter.update();
+
+            robotPoseController.update();
+            turret.update();
+            turret.activate();
+
+            running = action.run(packet);
+
+            Pose2d pose = drive.localizer.getPose();
+
+            telemetry.addData("Shooter Velocity", shooter.getVelocity());
+            telemetry.update();
+            packet.fieldOverlay().setStroke("#3F51B5");
+            Drawing.drawRobot(packet.fieldOverlay(), pose);
+            FtcDashboard.getInstance().sendTelemetryPacket(packet);
+
+
+//            extendo.runAuto();
+//            lifter.runAuto();
+////            lifter.sendTelemetryAuto(packet);
+//            dash.sendTelemetryPacket(packet);
+        }
     }
 }
