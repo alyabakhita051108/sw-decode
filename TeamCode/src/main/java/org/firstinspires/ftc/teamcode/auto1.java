@@ -96,7 +96,7 @@ public class auto1 extends LinearOpMode {
         TrajectoryActionBuilder trajectoryActionBuilder = drive.actionBuilder(beginPose)
                 .afterTime(0.0, () -> {
                     shooter.setTargetVelocity(SHOOTER_VELOCITY);
-                    turret.setTargetWorldAngle(reflect(-2)); //
+                    turret.setTargetWorldAngle(reflect(135-2)); //
                 })
                 .lineToYConstantHeading(reflect(44))
                 .splineTo(reflectV(-10.35, 10.35), Math.toRadians(reflect(-45.00)))
@@ -125,7 +125,7 @@ public class auto1 extends LinearOpMode {
                 .splineTo(reflectV(-13.06, 13.99), Math.toRadians(reflect(268.58)))
                 //shoot2
                 .afterTime(0.0, () -> {
-                    turret.setTargetWorldAngle(reflect(95)); //
+                    turret.setTargetWorldAngle(reflect(135.6-2)); //
 
                     intake.setPower(1);
                     }

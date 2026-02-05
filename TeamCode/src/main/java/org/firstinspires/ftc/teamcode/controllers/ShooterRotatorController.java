@@ -54,7 +54,7 @@ public class ShooterRotatorController {
     }
 
     public void setTargetWorldAngle(double angle) {
-        this.targetWorldAngle = angle;
+        this.targetWorldAngle = normalizeAngle(angle);
     }
 
     public void update() {
