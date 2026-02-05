@@ -57,6 +57,8 @@ public class auto1 extends LinearOpMode {
         return isBlue ? -value : value;
     }
 
+    private double DEGREE_OFFSET = 2;
+
     @Override
     public void runOpMode() throws InterruptedException {
         robotPoseController = new RobotPoseController(hardwareMap);
@@ -96,7 +98,7 @@ public class auto1 extends LinearOpMode {
         TrajectoryActionBuilder trajectoryActionBuilder = drive.actionBuilder(beginPose)
                 .afterTime(0.0, () -> {
                     shooter.setTargetVelocity(SHOOTER_VELOCITY);
-                    turret.setTargetWorldAngle(reflect(135-2)); //
+                    turret.setTargetWorldAngle(reflect(135-DEGREE_OFFSET)); //
                 })
                 .lineToYConstantHeading(reflect(44))
                 .splineTo(reflectV(-10.35, 10.35), Math.toRadians(reflect(-45.00)))
@@ -125,7 +127,7 @@ public class auto1 extends LinearOpMode {
                 .splineTo(reflectV(-13.06, 13.99), Math.toRadians(reflect(268.58)))
                 //shoot2
                 .afterTime(0.0, () -> {
-                    turret.setTargetWorldAngle(reflect(135.6-2)); //
+                    turret.setTargetWorldAngle(reflect(135.6-DEGREE_OFFSET)); // remove degree offset if necessary
 
                     intake.setPower(1);
                     }
@@ -151,7 +153,7 @@ public class auto1 extends LinearOpMode {
                 .waitSeconds(0.5)
                 //shoot 3
                 .afterTime(0.0, () -> {
-                    turret.setTargetWorldAngle(reflect(95));
+                    turret.setTargetWorldAngle(reflect(135.7-DEGREE_OFFSET));
                     intake.setPower(1);
                 })
                 .afterTime(0.5, () -> servo1.setPower(-1))

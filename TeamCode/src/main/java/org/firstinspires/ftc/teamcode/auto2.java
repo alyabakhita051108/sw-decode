@@ -54,6 +54,8 @@ public class auto2 extends LinearOpMode {
         return isBlue ? -value : value;
     }
 
+    private double DEGREE_OFFSET = 2;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -125,6 +127,8 @@ public class auto2 extends LinearOpMode {
 
                 // BLM DI TEST
                 .afterTime(0.0, () -> {
+                    turret.setTargetWorldAngle(158.9-DEGREE_OFFSET);
+
                     shooter.setTargetVelocity(SHOOTER_VELOCITY);
                 })
 
