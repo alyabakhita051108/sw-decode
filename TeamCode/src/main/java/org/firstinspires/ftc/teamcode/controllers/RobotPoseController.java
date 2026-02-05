@@ -23,7 +23,7 @@ public class RobotPoseController {
                 )
         );
         imu.initialize(parameters);
-        imu.resetYaw();
+//        imu.resetYaw();
 
 //        yawOffset = getYaw();
     }
@@ -32,6 +32,10 @@ public class RobotPoseController {
         return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
     }
 
+
+    public void resetYaw() {
+        imu.resetYaw();
+    }
 
     public void update() {
         robotYaw = normalizeAngle(imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES) - yawOffset);

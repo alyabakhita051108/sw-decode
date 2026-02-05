@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.controllers;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class ShooterController {
     private boolean isActive = true;
@@ -12,11 +13,13 @@ public class ShooterController {
     private double SHOOTER_WHEEL_RADIUS = 4.5;
     private double SHOOTER_TICKS_PER_REV = 28;
     private double SHOOTER_EFFICIENCY = 0.85;
-    private double SHOOTER_ANGLE_MINIMUM = 32;
-    private double SHOOTER_ANGLE_MAXIMUM = 46;
+    private double SHOOTER_ANGLE_MINIMUM = 32 ;
+    private double SHOOTER_ANGLE_MAXIMUM = 47;
     private double SHOOTER_ANGLE_MAXIMUM_POS = 0.405;
+    private double SHOOTER_CURRENT_DEG = SHOOTER_ANGLE_MINIMUM; // in cm
 
     private DcMotorEx shooter;
+    private Servo servoLeft;
 
     public static double P = 0;
     public static double F = 0.00017;
@@ -36,6 +39,17 @@ public class ShooterController {
         pidfController.setOutputBounds(-1, 1);
 
     }
+
+    public ShooterController(HardwareMap hardwareMap, String shooterDeviceName, String servoDeviceName) {
+        shooter = hardwareMap.get(DcMotorEx.class, shooterDeviceName);
+        shooter.setDirection(DcMotor.Direction.REVERSE);
+        shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        pidfController.setOutputBounds(-1, 1);
+        servoLeft = hardwareMap.get(Servo.class, servoDeviceName);
+
+    }
+
+
 
     // DO NOT DELETE
     public ShooterController() {
@@ -67,7 +81,6 @@ public class ShooterController {
             shooter.setPower(power);
         }
     }
-
 
     public ShooterSolution getBestShootingSolution(double distanceCm, double targetHeightCm) {
         double minRPM = Double.MAX_VALUE;
@@ -118,6 +131,11 @@ public class ShooterController {
         double rpm = (rps * 60) / SHOOTER_EFFICIENCY;
 
         return rpm;
+    }
+
+
+    public double setDefaultPos() {
+        return angleToServo(SHOOTER_ANGLE_MINIMUM);
     }
 
 

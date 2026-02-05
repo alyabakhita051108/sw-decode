@@ -58,6 +58,8 @@ public class auto2 extends LinearOpMode {
         intake = hardwareMap.get(DcMotorEx.class, "intake");
         servo1 = hardwareMap.get(CRServo.class, "servo1");
 
+        robotPoseController.resetYaw();
+
         while (true) {
             if (gamepad1.crossWasPressed()) {
                 isBlue = !isBlue;
@@ -70,38 +72,113 @@ public class auto2 extends LinearOpMode {
             }
         }
 
-        Pose2d beginPose = new Pose2d(
+        robotPoseController.resetYaw();
+
+        Pose2d beginPose = reflect(
                 61.06, 12.27,Math.toRadians(150.16)
         );
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
 
-        waitForStart();
+//        Action path = drive.actionBuilder(beginPose)
+//               // .afterTime(0.0, () -> shooter.setPower(-1))
+//                .waitSeconds(3)
+//                .splineTo(reflectV(34.3, 27.28), Math.toRadians(reflect(92.41)))
+//                .splineTo(reflectV(34.4, 58.08), Math.toRadians(reflect(91.61)))
+//                .waitSeconds(0.5)
+//                //ballintked
+//                .lineToYConstantHeading(reflect(48))
+//                .splineTo(reflectV(60.74, 11.02), Math.toRadians(reflect(-63.43)))
+//
+//                //shoot2
+//                .waitSeconds(3)
+//                .splineTo(reflectV(19.93, 24.63), Math.toRadians(reflect(132.74)))
+//                .splineTo(reflectV(11.5, 58.24), Math.toRadians(reflect(88.81)))
+//                .waitSeconds(0.5)
+//
+////                .splineTo(new Vector2d(54.18, 6.33), Math.toRadians(173.46))
+////                .splineTo(new Vector2d(25.25, 12.27), Math.toRadians(181.24))
+////                .splineTo(new Vector2d(11.3, 56.90), Math.toRadians(94.64))gi
+//                //ball 3 intaked
+//                .lineToYConstantHeading(reflect(reflect(48)))
+//                .splineTo(reflectV(59.34, 9.77), Math.toRadians(reflect(-42.51)))
+//
+//                .build();
 
         Action path = drive.actionBuilder(beginPose)
-               // .afterTime(0.0, () -> shooter.setPower(-1))
+                // .afterTime(0.0, () -> shooter.setPower(-1))
+
+                // BLM DI TEST
+                .afterTime(0.0, () -> {
+                    shooter.setTargetVelocity(SHOOTER_VELOCITY);
+                    turret.setTargetWorldAngle(reflect(-2));
+                })
+
+                .afterTime(0.5, () -> intake.setPower(1))
+//                .waitSeconds(1)
+                .afterTime(1, () -> servo1.setPower(-1))
+                .afterTime(1.5, () -> {
+//                    turret.setTargetWorldAngle();
+                    servo1.setPower(1);
+                    intake.setPower(0);
+                })
+                .waitSeconds(2.5) // try 2
+
                 .waitSeconds(3)
                 .splineTo(reflectV(34.3, 27.28), Math.toRadians(reflect(92.41)))
                 .splineTo(reflectV(34.4, 58.08), Math.toRadians(reflect(91.61)))
                 .waitSeconds(0.5)
                 //ballintked
                 .lineToYConstantHeading(reflect(48))
-                .splineTo(reflectV(60.74, 11.02), Math.toRadians(reflect(-63.43)))
+                .splineTo(reflectV(34.4, 38.33), Math.toRadians(reflect(-90.00)))
+                .splineTo(reflectV(57.95, 11.53), Math.toRadians(reflect(0.00)))
 
                 //shoot2
+                // BLM DI TEST
+                .afterTime(0.0, () -> {
+                    turret.setTargetWorldAngle(reflect(-2)); // di check dulu
+                    intake.setPower(1);
+                })
+//                .waitSeconds(1)
+                .afterTime(0.5, () -> servo1.setPower(-1))
+                .afterTime(2, () -> {
+//                    turret.setTargetWorldAngle();
+                    servo1.setPower(1);
+                    intake.setPower(0);
+                })
+                .waitSeconds(2) // try 1.5
+
                 .waitSeconds(3)
-                .splineTo(reflectV(19.93, 24.63), Math.toRadians(reflect(132.74)))
-                .splineTo(reflectV(11.5, 58.24), Math.toRadians(reflect(88.81)))
+                .splineTo(reflectV(34.77, 12.27), Math.toRadians(reflect(180.00)))
+                .splineTo(reflectV(12.18, 30.42), Math.toRadians(reflect(90.00)))
+                .splineTo(reflectV(12.18, 47.55), Math.toRadians(reflect(90.00)))
                 .waitSeconds(0.5)
 
 //                .splineTo(new Vector2d(54.18, 6.33), Math.toRadians(173.46))
 //                .splineTo(new Vector2d(25.25, 12.27), Math.toRadians(181.24))
 //                .splineTo(new Vector2d(11.3, 56.90), Math.toRadians(94.64))gi
                 //ball 3 intaked
-                .lineToYConstantHeading(reflect(reflect(48)))
-                .splineTo(reflectV(59.34, 9.77), Math.toRadians(reflect(-42.51)))
+                .lineToYConstantHeading(reflect(47))
+                .splineTo(reflectV(11.5, 33.85), Math.toRadians(reflect(270.00)))
+                .splineTo(reflectV(30.51, 11.71), Math.toRadians(0.00))
+                .splineTo(reflectV(60.24, 11.71), Math.toRadians(0.00))
+
+                .afterTime(0.0, () -> {
+                    turret.setTargetWorldAngle(reflect(-2)); // di check dulu
+                    intake.setPower(1);
+                })
+//                .waitSeconds(1)
+                .afterTime(0.5, () -> servo1.setPower(-1))
+                .afterTime(2, () -> {
+//                    turret.setTargetWorldAngle();
+                    servo1.setPower(1);
+                    intake.setPower(0);
+                })
 
                 .build();
+
+        waitForStart();
+
 
 
         Actions.runBlocking(new SequentialAction(path));

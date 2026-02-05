@@ -32,7 +32,7 @@ public class auto1 extends LinearOpMode {
     private CRServo servo1;
 
     private static final double COUNTS_PER_REV = 28.0;
-    private static final double SHOOTER_VELOCITY = 935; // ticks/sec
+    private static final double SHOOTER_VELOCITY = 1000; // ticks/sec
 
     private RobotPoseController robotPoseController;
     private ShooterRotatorController turret;
@@ -66,6 +66,8 @@ public class auto1 extends LinearOpMode {
         intake = hardwareMap.get(DcMotorEx.class , "intake");
         servo1 = hardwareMap.get(CRServo.class, "servo1");
 
+        robotPoseController.resetYaw();
+
         while (true) {
             if (gamepad1.crossWasPressed()) {
                 isBlue = !isBlue;
@@ -77,17 +79,19 @@ public class auto1 extends LinearOpMode {
                 break;
             }
         }
+        robotPoseController.resetYaw();
 
-        Pose2d beginPose = reflect(-53.24, 48.70,Math.toRadians(127.16));
+        Pose2d beginPose = reflect(-57, 45,Math.toRadians(reflect(127.16)));
+        // 53,24 | 48,7
 
         drive = new MecanumDrive(hardwareMap, beginPose);
 
         TrajectoryActionBuilder trajectoryActionBuilder = drive.actionBuilder(beginPose)
                 .afterTime(0.0, () -> {
                     shooter.setTargetVelocity(SHOOTER_VELOCITY);
-                    turret.setTargetWorldAngle(reflect(-2));
+                    turret.setTargetWorldAngle(reflect(-2)); //
                 })
-                .lineToYConstantHeading(reflect(48))
+                .lineToYConstantHeading(reflect(44))
                 .splineTo(reflectV(-10.35, 10.35), Math.toRadians(reflect(-45.00)))
                 //shoot1
                 .afterTime(0.0, () -> intake.setPower(1))
@@ -98,7 +102,7 @@ public class auto1 extends LinearOpMode {
                     servo1.setPower(1);
                     intake.setPower(0);
                 })
-                .waitSeconds(2)
+                .waitSeconds(2) // try 1.5
 
                 //shoot 1 selesai terus jalan ke dua mulai
                 .lineToYConstantHeading(reflect(7))
@@ -114,7 +118,7 @@ public class auto1 extends LinearOpMode {
                 .splineTo(reflectV(-13.06, 13.99), Math.toRadians(reflect(268.58)))
                 //shoot2
                 .afterTime(0.0, () -> {
-                    turret.setTargetWorldAngle(reflect(95));
+                    turret.setTargetWorldAngle(reflect(95)); //
 
                     intake.setPower(1);
                     }
@@ -122,10 +126,12 @@ public class auto1 extends LinearOpMode {
 //                .waitSeconds(1)
                 .afterTime(0.5, () -> servo1.setPower(-1))
                 .afterTime(2, () -> {
+//                    turret.setTargetWorldAngle();
                     servo1.setPower(1);
                     intake.setPower(0);
                 })
-                .waitSeconds(2)
+                .waitSeconds(2) // try 1.5
+
                 //shoot 2 selesai
                 .splineTo(reflectV(12.12, 23.69), Math.toRadians(reflect(89.78)))
                 .afterTime(0.0, () -> intake.setPower(1))
@@ -143,9 +149,11 @@ public class auto1 extends LinearOpMode {
                 })
                 .afterTime(0.5, () -> servo1.setPower(-1))
                 .afterTime(2, () -> {
+//                    turret.setTargetWorldAngle();
                     servo1.setPower(1);
                     intake.setPower(0);
                 });
+
         //.afterTime(0.0, () -> intake.setPower(1))
         //.afterTime(3.0, () -> intake.setPower(0))
         // .waitSeconds(3)
@@ -182,11 +190,11 @@ public class auto1 extends LinearOpMode {
             TelemetryPacket packet = new TelemetryPacket();
 //            packet.fieldOverlay().getOperations().addAll(previewCanvas.getOperations());
             packet.put("time", opModeTime);
+            shooter.update();
 
             robotPoseController.update();
             turret.update();
             turret.activate();
-            shooter.update();
 
             running = action.run(packet);
 

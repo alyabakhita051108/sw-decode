@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.controllers.ShooterRotatorController;
 public class cobacoba extends LinearOpMode {
 
     private double SHOOTER_ANGLE_MINIMUM = 32;
-    private double SHOOTER_ANGLE_MAXIMUM = 46;
+    private double SHOOTER_ANGLE_MAXIMUM = 47;
 
 
     /* ================= DRIVE ================= */
@@ -115,6 +115,8 @@ public class cobacoba extends LinearOpMode {
 
         shooter.setDirection(DcMotor.Direction.REVERSE);
         shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        servoLeft.setPosition(shooterController.setDefaultPos());
 
 //        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, coeffs);
 
@@ -210,11 +212,11 @@ public class cobacoba extends LinearOpMode {
             servoTimer.reset();
 
             if (gamepad1.y && servoCurrentDegree < SHOOTER_ANGLE_MAXIMUM) {
+                servoCurrentDegree += 0.5;
                 servoLeft.setPosition(shooterController.angleToServo(servoCurrentDegree));
-                servoCurrentDegree -= 0.05;
             } else if (gamepad1.a && servoCurrentDegree > SHOOTER_ANGLE_MINIMUM) {
+                servoCurrentDegree -= 0.5;
                 servoLeft.setPosition(shooterController.angleToServo(servoCurrentDegree));
-                servoCurrentDegree += 0.05;
             }
 
             /* ==       www=== SERVO 1 (FIXED) ===== */

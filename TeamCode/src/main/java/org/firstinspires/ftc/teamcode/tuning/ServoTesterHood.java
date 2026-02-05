@@ -9,7 +9,7 @@ public class  ServoTesterHood extends OpMode {
     private Servo servoLeft, servoRight;
 
     private double currentPos = 0;
-    private double limit = 1;
+    private double limit = 0.405;
     // max 0.37
 
     @Override
@@ -17,8 +17,8 @@ public class  ServoTesterHood extends OpMode {
         servoLeft = hardwareMap.get(Servo.class, "servoLeft");
         servoLeft.setDirection(Servo.Direction.FORWARD);
 
-        servoRight = hardwareMap.get(Servo.class, "servoRight");
-        servoRight.setDirection(Servo.Direction.REVERSE);
+//        servoRight = hardwareMap.get(Servo.class, "servoRight");
+//        servoRight.setDirection(Servo.Direction.REVERSE);
 //        armPivot = hardwareMap.get(Servo.class, "armPivot");
     }
 
@@ -32,7 +32,7 @@ public class  ServoTesterHood extends OpMode {
         }
 
         servoLeft.setPosition(currentPos);
-        servoRight.setPosition(currentPos);
+//        servoRight.setPosition(currentPos);
 
         telemetry.addData("shooterAd", currentPos);
 
