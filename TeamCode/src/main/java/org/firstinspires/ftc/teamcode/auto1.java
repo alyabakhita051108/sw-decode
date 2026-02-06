@@ -32,7 +32,7 @@ public class auto1 extends LinearOpMode {
     private CRServo servo1;
 
     private static final double COUNTS_PER_REV = 28.0;
-    private static final double SHOOTER_VELOCITY = 1000; // ticks/sec
+    private static final double SHOOTER_VELOCITY = 1100; // ticks/sec
 
     private RobotPoseController robotPoseController;
     private ShooterRotatorController turret;
