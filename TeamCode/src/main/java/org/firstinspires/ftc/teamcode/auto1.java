@@ -68,8 +68,6 @@ public class auto1 extends LinearOpMode {
         intake = hardwareMap.get(DcMotorEx.class , "intake");
         servo1 = hardwareMap.get(CRServo.class, "servo1");
 
-        robotPoseController.resetYaw();
-
         while (true) {
             if (gamepad1.crossWasPressed()) {
                 isBlue = !isBlue;
