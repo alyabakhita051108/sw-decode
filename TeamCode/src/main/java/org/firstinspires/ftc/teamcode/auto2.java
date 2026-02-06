@@ -74,7 +74,7 @@ public class auto2 extends LinearOpMode {
             }
 
             if (gamepad1.triangleWasPressed()) {
-                robotPoseController.resetYaw();
+//                robotPoseController.resetYaw();
                 hasBeenReset = true;
                 telemetry.addLine("ROBOT YAW JUST SET TO RESET!");
             }
@@ -97,6 +97,7 @@ public class auto2 extends LinearOpMode {
         }
 
 //        robotPoseController.resetYaw();
+        robotPoseController.resetYaw();
 
         Pose2d beginPose = reflect(
                 61.06, 12.27,Math.toRadians(150.16)
@@ -134,7 +135,7 @@ public class auto2 extends LinearOpMode {
 
                 // BLM DI TEST
                 .afterTime(0.0, () -> {
-//                    turret.setTargetWorldAngle(158.9-DEGREE_OFFSET);
+                    turret.setTargetWorldAngle(6.79);
 
                     shooter.setTargetVelocity(SHOOTER_VELOCITY);
                 })
@@ -161,7 +162,7 @@ public class auto2 extends LinearOpMode {
                 //shoot2
                 // BLM DI TEST
                 .afterTime(0.0, () -> {
-//                    turret.setTargetWorldAngle(reflect(158.9-DEGREE_OFFSET)); // di check dulu
+                    turret.setTargetWorldAngle(reflect(5.96459686622)); // di check dulu
                     intake.setPower(1);
                 })
 //                .waitSeconds(1)
@@ -189,7 +190,7 @@ public class auto2 extends LinearOpMode {
                 .splineTo(reflectV(60.24, 11.71), Math.toRadians(0.00))
 
                 .afterTime(0.0, () -> {
-//                    turret.setTargetWorldAngle(reflect(158.9-DEGREE_OFFSET)); // di check dulu
+                    turret.setTargetWorldAngle(reflect(6.42431624699)); // di check dulu
                     intake.setPower(1);
                 })
 //                .waitSeconds(1)

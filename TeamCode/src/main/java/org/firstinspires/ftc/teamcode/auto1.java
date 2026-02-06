@@ -20,7 +20,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.controllers.RobotPoseController;
 import org.firstinspires.ftc.teamcode.controllers.ShooterController;
 import org.firstinspires.ftc.teamcode.controllers.ShooterRotatorController;
-import org.opencv.core.Mat;
+
 
 
 @Autonomous(name = "auto1")
@@ -31,7 +31,7 @@ public class auto1 extends LinearOpMode {
     private CRServo servo1;
 
     private static final double COUNTS_PER_REV = 28.0;
-    private static final double SHOOTER_VELOCITY = 1100; // ticks/sec
+    private static final double SHOOTER_VELOCITY = 1250; // ticks/sec
 
     private RobotPoseController robotPoseController;
     private ShooterRotatorController turret;
@@ -56,6 +56,7 @@ public class auto1 extends LinearOpMode {
         return isBlue ? -value : value;
     }
 
+
     @Override
     public void runOpMode() throws InterruptedException {
         robotPoseController = new RobotPoseController(hardwareMap);
@@ -64,6 +65,9 @@ public class auto1 extends LinearOpMode {
 //        shooter =
         intake = hardwareMap.get(DcMotorEx.class , "intake");
         servo1 = hardwareMap.get(CRServo.class, "servo1");
+
+
+
 
         while (true) {
             if (gamepad1.crossWasPressed()) {
@@ -88,11 +92,11 @@ public class auto1 extends LinearOpMode {
                     turret.setTargetWorldAngle(reflect(-2));
                 })
                 .lineToYConstantHeading(reflect(48))
-                .splineTo(reflectV(-10.35, 10.35), Math.toRadians(reflect(-45.00)))
+                .splineTo(reflectV(-14.62, 15.24 ), Math.toRadians(reflect(-45.00)))
                 //shoot1
                 .afterTime(0.0, () -> intake.setPower(1))
 //                .waitSeconds(1)
-                .afterTime(0.5, () -> servo1.setPower(-1))
+                .afterTime(0.2, () -> servo1.setPower(-1))
                 .afterTime(2, () -> {
 //                    turret.setTargetWorldAngle();
                     servo1.setPower(1);
@@ -108,19 +112,19 @@ public class auto1 extends LinearOpMode {
                 .splineTo(reflectV(-10.24, 21.50), Math.toRadians(reflect(94.56)))
                 .splineTo(reflectV(-11.80, 59.96), Math.toRadians(reflect(90.00)))
                 .waitSeconds(0.5)
+                .afterTime(1.0, () -> intake.setPower(0))
                 .lineToYConstantHeading(reflect(54))
-                .afterTime(0.0, () -> intake.setPower(0))
 //                .afterTime(0.0, () -> turret.setPower(0))
                 .splineTo(reflectV(-13.06, 13.99), Math.toRadians(reflect(268.58)))
                 //shoot2
                 .afterTime(0.0, () -> {
-                            turret.setTargetWorldAngle(reflect(95));
+                            turret.setTargetWorldAngle(reflect(-4)); // next coba -12.5
 
                             intake.setPower(1);
                         }
                 )
 //                .waitSeconds(1)
-                .afterTime(0.5, () -> servo1.setPower(-1))
+                .afterTime(0.3, () -> servo1.setPower(-1))
                 .afterTime(2, () -> {
                     servo1.setPower(1);
                     intake.setPower(0);
@@ -133,15 +137,15 @@ public class auto1 extends LinearOpMode {
                 //.splineTo(new Vector2d(11.34, 55.27), Math.toRadians(89.27))
                 .waitSeconds(0.5)
                 .lineToYConstantHeading(reflect(48))
-                .afterTime(0.0, () -> intake.setPower(0))
+                .afterTime(2.0, () -> intake.setPower(0))
                 .splineTo(reflectV(-12.74, 13.84), Math.toRadians(reflect(239.92)))
                 .waitSeconds(0.5)
                 //shoot 3
                 .afterTime(0.0, () -> {
-                    turret.setTargetWorldAngle(reflect(95));
+                    turret.setTargetWorldAngle(reflect(2));
                     intake.setPower(1);
                 })
-                .afterTime(0.5, () -> servo1.setPower(-1))
+                .afterTime(0.3, () -> servo1.setPower(-1))
                 .afterTime(2, () -> {
                     servo1.setPower(1);
                     intake.setPower(0);
