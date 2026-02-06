@@ -1,8 +1,13 @@
 package org.firstinspires.ftc.teamcode.controllers;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class ShooterController {
@@ -31,13 +36,17 @@ public class ShooterController {
         return 0;
     });
 
+    public boolean isUsingBuiltInPID = false;
+
+    public static double PID_P = 90;
+    public static double PID_F = 17.6;
+    PIDFCoefficients ShooterPIDF_Coefficients = new PIDFCoefficients(PID_P, 0, 0, PID_F);
 
     public ShooterController(HardwareMap hardwareMap, String shooterDeviceName) {
         shooter = hardwareMap.get(DcMotorEx.class, shooterDeviceName);
         shooter.setDirection(DcMotor.Direction.REVERSE);
         shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pidfController.setOutputBounds(-1, 1);
-
     }
 
     public ShooterController(HardwareMap hardwareMap, String shooterDeviceName, String servoDeviceName) {
@@ -46,9 +55,14 @@ public class ShooterController {
         shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         pidfController.setOutputBounds(-1, 1);
         servoLeft = hardwareMap.get(Servo.class, servoDeviceName);
-
     }
 
+    public void useBuiltInPID() {
+        shooter.setDirection(DcMotor.Direction.REVERSE);
+        shooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, ShooterPIDF_Coefficients);
+
+        isUsingBuiltInPID = true;
+    }
 
 
     // DO NOT DELETE
@@ -76,7 +90,13 @@ public class ShooterController {
     }
 
     public void update() {
-        if (isActive ) {
+        if (isActive) {
+
+            if (isUsingBuiltInPID) {
+                shooter.setVelocity(pidfController.targetVelocity);
+                return;
+            }
+
             double power = pidfController.update(System.nanoTime(), 0, shooter.getVelocity());
             shooter.setPower(power);
         }
@@ -168,6 +188,23 @@ public class ShooterController {
         double circumference = 2 * Math.PI * wheelRadiusCm; // cm
         double revPerSecond = rpm / 60.0;
         return circumference * revPerSecond;
+    }
+
+    // Roadrunner Action that blocks until RPM is within 5% of target
+    public Action waitUntilReady() {
+        return new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                double currentVelo = shooter.getVelocity();
+
+//                // These will show up on your Driver Hub while it waits
+//                packet.put("Live RPM", String.format("%.0f", currentVelo));
+//                packet.put("Status", "Waiting for spin-up...");
+
+                // Keeps running (returning true) until we are at 95% of 3000 RPM
+                return currentVelo < (pidfController.targetVelocity * 0.95);
+            }
+        };
     }
 
 }

@@ -117,9 +117,9 @@ public class MeepMeepTesting {
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
-//                .addEntity(strategyOne)
+                .addEntity(strategyOne)
 //                .addEntity(strategyTwo_ORI)
-                .addEntity(strategyTwo)
+//                .addEntity(strategyTwo)
                 .start();
     }
 }

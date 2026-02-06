@@ -66,8 +66,7 @@ public class auto1 extends LinearOpMode {
         intake = hardwareMap.get(DcMotorEx.class , "intake");
         servo1 = hardwareMap.get(CRServo.class, "servo1");
 
-
-
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         while (true) {
             if (gamepad1.crossWasPressed()) {
@@ -81,8 +80,11 @@ public class auto1 extends LinearOpMode {
             }
         }
 
+        shooter.useBuiltInPID();
         robotPoseController.resetYaw();
-        Pose2d beginPose = reflect(-53.24, 48.70,Math.toRadians(127.16));
+
+        // previous : 53.24, 48.70
+        Pose2d beginPose = reflect(-57, 45,Math.toRadians(127.16));
 
         drive = new MecanumDrive(hardwareMap, beginPose);
 
