@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class ShooterController {
     private boolean isActive = true;
     private double SHOOTER_MOTOR_COUNTS_PER_REV = 28.0;
-    private double SHOOTER_HEIGHT = 35; // in cm
+    private double SHOOTER_HEIGHT = 35; // in cmp
 
     private double SHOOTER_WHEEL_RADIUS = 4.5;
     private double SHOOTER_TICKS_PER_REV = 28;
