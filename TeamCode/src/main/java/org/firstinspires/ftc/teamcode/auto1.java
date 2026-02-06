@@ -58,6 +58,8 @@ public class auto1 extends LinearOpMode {
     }
 
     private double DEGREE_OFFSET = 2;
+    private boolean hasBeenReset = false;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -75,7 +77,12 @@ public class auto1 extends LinearOpMode {
 
             if (gamepad1.triangleWasPressed()) {
                 robotPoseController.resetYaw();
-                telemetry.addLine("ROBOT YAW JUST SET TO RESET");
+                hasBeenReset = true;
+                telemetry.addLine("ROBOT YAW JUST SET TO RESET!");
+            }
+
+            if (hasBeenReset) {
+                telemetry.addLine("ROBOT YAW ALREADY BEEN RESET!");
             }
 
             telemetry.addData("ROBOT CURRENT HEADING",robotPoseController.getRobotYaw() );
