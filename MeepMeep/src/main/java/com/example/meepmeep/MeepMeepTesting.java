@@ -87,11 +87,11 @@ public class MeepMeepTesting {
 
 //                .waitSeconds(3)
                 .splineTo(new Vector2d(41.72, 15.79), Math.toRadians(129.81))
-                .waitSeconds(3)
+//                .waitSeconds(3)
 
                 .splineTo(new Vector2d(34.3, 27.28), Math.toRadians(92.41))
                 .splineTo(new Vector2d(34.4, 58.08), Math.toRadians(91.61))
-                .waitSeconds(0.5)
+                .waitSeconds(1.0)
                 //ballintked
                 .lineToYConstantHeading((48))
                 .splineTo(new Vector2d(34.4, 38.33), Math.toRadians(-90.00))
@@ -101,7 +101,7 @@ public class MeepMeepTesting {
                 .splineTo(new Vector2d(34.77, 12.27), Math.toRadians(180.00))
                 .splineTo(new Vector2d(12.18, 30.42), Math.toRadians(90.00))
                 .splineTo(new Vector2d(12.18, 47.55), Math.toRadians(90.00))
-                .waitSeconds(0.5)
+                .waitSeconds(1.0)
 
 //                .splineTo(new Vector2d(54.18, 6.33), Math.toRadians(173.46))
 //                .splineTo(new Vector2d(25.25, 12.27), Math.toRadians(181.24))
@@ -117,9 +117,9 @@ public class MeepMeepTesting {
         meepMeep.setBackground(MeepMeep.Background.FIELD_DECODE_OFFICIAL)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
-                .addEntity(strategyOne)
+//                .addEntity(strategyOne)
 //                .addEntity(strategyTwo_ORI)
-//                .addEntity(strategyTwo)
+                .addEntity(strategyTwo)
                 .start();
     }
 }

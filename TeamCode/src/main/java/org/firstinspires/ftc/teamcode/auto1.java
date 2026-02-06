@@ -93,7 +93,7 @@ public class auto1 extends LinearOpMode {
                     shooter.setTargetVelocity(SHOOTER_VELOCITY);
                     turret.setTargetWorldAngle(reflect(-2));
                 })
-                .lineToYConstantHeading(reflect(48))
+                .lineToYConstantHeading(reflect(44))
                 .splineTo(reflectV(-14.62, 15.24 ), Math.toRadians(reflect(-45.00)))
                 //shoot1
                 .afterTime(0.0, () -> intake.setPower(1))
@@ -120,7 +120,7 @@ public class auto1 extends LinearOpMode {
                 .splineTo(reflectV(-13.06, 13.99), Math.toRadians(reflect(268.58)))
                 //shoot2
                 .afterTime(0.0, () -> {
-                            turret.setTargetWorldAngle(reflect(-4)); // next coba -12.5
+                            turret.setTargetWorldAngle(reflect(2)); // next coba -12.5
 
                             intake.setPower(1);
                         }
