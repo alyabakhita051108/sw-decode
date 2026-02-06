@@ -80,6 +80,8 @@ public class auto1 extends LinearOpMode {
                 telemetry.addLine("ROBOT YAW JUST SET TO RESET");
             }
 
+            telemetry.addData("ROBOT CURRENT HEADING",robotPoseController.getRobotYaw() );
+
 
             telemetry.addData("Current Team : ", isBlue ? "BLUE" : "RED");
             telemetry.addLine("press gamepad 1 triangle button to reset robot yaw if necessary.");
